@@ -1,0 +1,150 @@
+openapi: 3.0.0
+info:
+  title: Shopisel API Prices Service
+  version: 1.0.0
+  description: Pedidos relacionados com preços de produtos por loja.
+
+servers:
+  - url: http://localhost:5000
+
+paths:
+  /prices:
+    get:
+      summary: Obter preços por produto (e opcionalmente por loja)
+      tags: [Price]
+      parameters:
+        - name: productId
+          in: query
+          description: ID do produto (obrigatório)
+          required: true
+          schema:
+            type: string
+            example: prod_abc123
+        - name: storeId
+          in: query
+          description: ID da loja (opcional - se não enviado devolve todos os preços do produto)
+          required: false
+          schema:
+            type: string
+            example: store_xyz789
+      responses:
+        '200':
+          description: Preço(s) encontrado(s)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/PriceResponse'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/PriceResponse'
+        '400':
+          description: productId em falta
+        '404':
+          description: Preço não encontrado (quando storeId é fornecido)
+    post:
+      summary: Criar preço para um produto numa loja
+      tags: [Price]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePriceRequest'
+      responses:
+        '201':
+          description: Preço criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+        '409':
+          description: Já existe um preço para este produto nesta loja
+        '422':
+          description: Dados inválidos (preço <= 0, campos em falta)
+
+  /prices/{priceId}:
+    put:
+      summary: Atualizar o valor de um preço
+      tags: [Price]
+      parameters:
+        - name: priceId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePriceRequest'
+      responses:
+        '200':
+          description: Preço atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+        '404':
+          description: Preço não encontrado
+        '422':
+          description: Dados inválidos (preço <= 0)
+    delete:
+      summary: Apagar um preço
+      tags: [Price]
+      parameters:
+        - name: priceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Preço removido
+        '404':
+          description: Preço não encontrado
+
+components:
+  schemas:
+    PriceResponse:
+      type: object
+      required: [id, productId, storeId, price, updatedAt]
+      properties:
+        id:
+          type: string
+          example: price_f1e2d3c4b5a6
+        productId:
+          type: string
+          example: prod_abc123
+        storeId:
+          type: string
+          example: store_xyz789
+        price:
+          type: number
+          format: decimal
+          example: 1.99
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-04-02T17:00:00Z"
+    CreatePriceRequest:
+      type: object
+      required: [productId, storeId, price]
+      properties:
+        productId:
+          type: string
+        storeId:
+          type: string
+        price:
+          type: number
+          format: decimal
+          minimum: 0.01
+    UpdatePriceRequest:
+      type: object
+      required: [price]
+      properties:
+        price:
+          type: number
+          format: decimal
+          minimum: 0.01
