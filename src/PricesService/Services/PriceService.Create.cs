@@ -25,6 +25,11 @@ public partial class PriceService
             throw new ArgumentException("The price must be greater than zero.", nameof(request));
         }
 
+        if (request.Sale is <= 0)
+        {
+            throw new ArgumentException("The sale must be greater than zero when informed.", nameof(request));
+        }
+
         var productId = request.ProductId.Trim();
         var storeId = request.StoreId.Trim();
 
@@ -43,6 +48,8 @@ public partial class PriceService
             ProductId = productId,
             StoreId = storeId,
             Price = request.Price,
+            Sale = request.Sale,
+            SaleDate = request.SaleDate,
             UpdatedAt = DateTime.UtcNow
         };
 
