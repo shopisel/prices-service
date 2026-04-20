@@ -10,5 +10,9 @@ public class PriceEntity
 
     public decimal Price { get; set; }
 
+    public decimal? Sale { get; set; }
+
+    public DateTime? SaleDate { get; set; }
+
     public DateTime UpdatedAt { get; set; }
 }

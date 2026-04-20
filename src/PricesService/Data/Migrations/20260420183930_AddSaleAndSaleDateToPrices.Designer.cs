@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PricesService.Data;
@@ -11,9 +12,11 @@ using PricesService.Data;
 namespace PricesService.Data.Migrations
 {
     [DbContext(typeof(PricesServiceDbContext))]
-    partial class PricesServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260420183930_AddSaleAndSaleDateToPrices")]
+    partial class AddSaleAndSaleDateToPrices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

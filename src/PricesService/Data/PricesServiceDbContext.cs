@@ -33,6 +33,14 @@ public class PricesServiceDbContext(DbContextOptions<PricesServiceDbContext> opt
                 .HasColumnType("numeric(10,2)")
                 .IsRequired();
 
+            entity.Property(price => price.Sale)
+                .HasColumnName("sale")
+                .HasColumnType("numeric(10,2)");
+
+            entity.Property(price => price.SaleDate)
+                .HasColumnName("sale_date")
+                .HasColumnType("timestamp with time zone");
+
             entity.Property(price => price.UpdatedAt)
                 .HasColumnName("updated_at")
                 .HasColumnType("timestamp with time zone")

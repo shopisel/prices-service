@@ -15,6 +15,11 @@ public partial class PriceService
             throw new ArgumentException("The price must be greater than zero.", nameof(request));
         }
 
+        if (request.Sale is <= 0)
+        {
+            throw new ArgumentException("The sale must be greater than zero when informed.", nameof(request));
+        }
+
         var entity = await _dbContext.Prices
             .FirstOrDefaultAsync(price => price.Id == id.Trim(), cancellationToken);
 
@@ -24,6 +29,8 @@ public partial class PriceService
         }
 
         entity.Price = request.Price;
+        entity.Sale = request.Sale;
+        entity.SaleDate = request.SaleDate;
         entity.UpdatedAt = DateTime.UtcNow;
 
         await _dbContext.SaveChangesAsync(cancellationToken);
