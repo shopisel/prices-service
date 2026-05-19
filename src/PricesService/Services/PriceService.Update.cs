@@ -10,14 +10,9 @@ public partial class PriceService
         UpdatePriceRequest request,
         CancellationToken cancellationToken = default)
     {
-        if (request.Price <= 0)
+        if (string.IsNullOrWhiteSpace(request.PriceText))
         {
-            throw new ArgumentException("The price must be greater than zero.", nameof(request));
-        }
-
-        if (request.Sale is <= 0)
-        {
-            throw new ArgumentException("The sale must be greater than zero when informed.", nameof(request));
+            throw new ArgumentException("The priceText is required.", nameof(request));
         }
 
         var entity = await _dbContext.Prices
@@ -28,8 +23,10 @@ public partial class PriceService
             return null;
         }
 
-        entity.Price = request.Price;
-        entity.Sale = request.Sale;
+        entity.PriceText = request.PriceText.Trim();
+        entity.SaleText = string.IsNullOrWhiteSpace(request.SaleText) ? null : request.SaleText.Trim();
+        entity.QuantityText = string.IsNullOrWhiteSpace(request.QuantityText) ? null : request.QuantityText.Trim();
+        entity.UnitPriceText = string.IsNullOrWhiteSpace(request.UnitPriceText) ? null : request.UnitPriceText.Trim();
         entity.SaleDate = request.SaleDate;
         entity.UpdatedAt = DateTime.UtcNow;
 

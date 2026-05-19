@@ -8,9 +8,13 @@ public class PriceEntity
 
     public string StoreId { get; set; } = string.Empty;
 
-    public decimal Price { get; set; }
+    public string PriceText { get; set; } = string.Empty;
 
-    public decimal? Sale { get; set; }
+    public string? SaleText { get; set; }
+
+    public string? QuantityText { get; set; }
+
+    public string? UnitPriceText { get; set; }
 
     public DateTime? SaleDate { get; set; }
 

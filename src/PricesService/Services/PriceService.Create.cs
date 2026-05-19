@@ -20,18 +20,17 @@ public partial class PriceService
             throw new ArgumentException("The storeId is required.", nameof(request));
         }
 
-        if (request.Price <= 0)
+        if (string.IsNullOrWhiteSpace(request.PriceText))
         {
-            throw new ArgumentException("The price must be greater than zero.", nameof(request));
-        }
-
-        if (request.Sale is <= 0)
-        {
-            throw new ArgumentException("The sale must be greater than zero when informed.", nameof(request));
+            throw new ArgumentException("The priceText is required.", nameof(request));
         }
 
         var productId = request.ProductId.Trim();
         var storeId = request.StoreId.Trim();
+        var priceText = request.PriceText.Trim();
+        var saleText = string.IsNullOrWhiteSpace(request.SaleText) ? null : request.SaleText.Trim();
+        var quantityText = string.IsNullOrWhiteSpace(request.QuantityText) ? null : request.QuantityText.Trim();
+        var unitPriceText = string.IsNullOrWhiteSpace(request.UnitPriceText) ? null : request.UnitPriceText.Trim();
 
         var alreadyExists = await _dbContext.Prices
             .AnyAsync(price => price.ProductId == productId && price.StoreId == storeId, cancellationToken);
@@ -47,8 +46,10 @@ public partial class PriceService
             Id = GeneratePriceId(),
             ProductId = productId,
             StoreId = storeId,
-            Price = request.Price,
-            Sale = request.Sale,
+            PriceText = priceText,
+            SaleText = saleText,
+            QuantityText = quantityText,
+            UnitPriceText = unitPriceText,
             SaleDate = request.SaleDate,
             UpdatedAt = DateTime.UtcNow
         };
