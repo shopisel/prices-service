@@ -4,19 +4,25 @@ public sealed record PriceResponse(
     string Id,
     string ProductId,
     string StoreId,
-    decimal Price,
-    decimal? Sale,
+    string PriceText,
+    string? SaleText,
+    string? QuantityText,
+    string? UnitPriceText,
     DateTime? SaleDate,
     DateTime UpdatedAt);
 
 public sealed record CreatePriceRequest(
     string ProductId,
     string StoreId,
-    decimal Price,
-    decimal? Sale,
+    string PriceText,
+    string? SaleText,
+    string? QuantityText,
+    string? UnitPriceText,
     DateTime? SaleDate);
 
 public sealed record UpdatePriceRequest(
-    decimal Price,
-    decimal? Sale,
+    string PriceText,
+    string? SaleText,
+    string? QuantityText,
+    string? UnitPriceText,
     DateTime? SaleDate);

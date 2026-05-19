@@ -28,14 +28,22 @@ public class PricesServiceDbContext(DbContextOptions<PricesServiceDbContext> opt
                 .HasColumnType("varchar")
                 .IsRequired();
 
-            entity.Property(price => price.Price)
-                .HasColumnName("price")
-                .HasColumnType("numeric(10,2)")
+            entity.Property(price => price.PriceText)
+                .HasColumnName("price_text")
+                .HasColumnType("varchar")
                 .IsRequired();
 
-            entity.Property(price => price.Sale)
-                .HasColumnName("sale")
-                .HasColumnType("numeric(10,2)");
+            entity.Property(price => price.SaleText)
+                .HasColumnName("sale_text")
+                .HasColumnType("varchar");
+
+            entity.Property(price => price.QuantityText)
+                .HasColumnName("quantity_text")
+                .HasColumnType("varchar");
+
+            entity.Property(price => price.UnitPriceText)
+                .HasColumnName("unit_price_text")
+                .HasColumnType("varchar");
 
             entity.Property(price => price.SaleDate)
                 .HasColumnName("sale_date")

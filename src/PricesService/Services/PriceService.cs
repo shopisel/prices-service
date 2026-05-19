@@ -10,5 +10,14 @@ public partial class PriceService(PricesServiceDbContext dbContext) : IPriceServ
     private static string GeneratePriceId() => $"price_{Guid.NewGuid():N}";
 
     private static PriceResponse MapToResponse(Data.Entities.PriceEntity entity) =>
-        new(entity.Id, entity.ProductId, entity.StoreId, entity.Price, entity.Sale, entity.SaleDate, entity.UpdatedAt);
+        new(
+            entity.Id,
+            entity.ProductId,
+            entity.StoreId,
+            entity.PriceText,
+            entity.SaleText,
+            entity.QuantityText,
+            entity.UnitPriceText,
+            entity.SaleDate,
+            entity.UpdatedAt);
 }

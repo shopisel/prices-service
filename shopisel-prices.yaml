@@ -51,6 +51,23 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreatePriceRequest'
+            examples:
+              base:
+                summary: Exemplo com preço
+                value:
+                  productId: prod_abc123
+                  storeId: store_xyz789
+                  priceText: "1.99"
+              completo:
+                summary: Exemplo completo
+                value:
+                  productId: prod_abc123
+                  storeId: store_xyz789
+                  priceText: "1.99"
+                  saleText: "1.49"
+                  quantityText: "500 g"
+                  unitPriceText: "2.98 €/kg"
+                  saleDate: "2026-04-20T18:39:30Z"
       responses:
         '201':
           description: Preço criado
@@ -61,7 +78,7 @@ paths:
         '409':
           description: Já existe um preço para este produto nesta loja
         '422':
-          description: Dados inválidos (preço <= 0, campos em falta)
+          description: Dados inválidos (campos em falta)
 
   /prices/{priceId}:
     put:
@@ -79,6 +96,19 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UpdatePriceRequest'
+            examples:
+              base:
+                summary: Exemplo com preço
+                value:
+                  priceText: "2.09"
+              completo:
+                summary: Exemplo completo
+                value:
+                  priceText: "2.09"
+                  saleText: "1.89"
+                  quantityText: "500 g"
+                  unitPriceText: "4.18 €/kg"
+                  saleDate: "2026-04-20T18:39:30Z"
       responses:
         '200':
           description: Preço atualizado
@@ -89,7 +119,7 @@ paths:
         '404':
           description: Preço não encontrado
         '422':
-          description: Dados inválidos (preço <= 0)
+          description: Dados inválidos (campos em falta)
     delete:
       summary: Apagar um preço
       tags: [Price]
@@ -109,7 +139,7 @@ components:
   schemas:
     PriceResponse:
       type: object
-      required: [id, productId, storeId, price, updatedAt]
+      required: [id, productId, storeId, priceText, updatedAt]
       properties:
         id:
           type: string
@@ -120,31 +150,69 @@ components:
         storeId:
           type: string
           example: store_xyz789
-        price:
-          type: number
-          format: decimal
-          example: 1.99
+        priceText:
+          type: string
+          example: "1.99"
+        saleText:
+          type: string
+          nullable: true
+          example: "1.49"
+        quantityText:
+          type: string
+          nullable: true
+          example: "500 g"
+        unitPriceText:
+          type: string
+          nullable: true
+          example: "2.98 €/kg"
+        saleDate:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2026-04-20T18:39:30Z"
         updatedAt:
           type: string
           format: date-time
           example: "2026-04-02T17:00:00Z"
     CreatePriceRequest:
       type: object
-      required: [productId, storeId, price]
+      required: [productId, storeId, priceText]
       properties:
         productId:
           type: string
         storeId:
           type: string
-        price:
-          type: number
-          format: decimal
-          minimum: 0.01
+        priceText:
+          type: string
+        saleText:
+          type: string
+          nullable: true
+        quantityText:
+          type: string
+          nullable: true
+        unitPriceText:
+          type: string
+          nullable: true
+        saleDate:
+          type: string
+          format: date-time
+          nullable: true
     UpdatePriceRequest:
       type: object
-      required: [price]
+      required: [priceText]
       properties:
-        price:
-          type: number
-          format: decimal
-          minimum: 0.01
+        priceText:
+          type: string
+        saleText:
+          type: string
+          nullable: true
+        quantityText:
+          type: string
+          nullable: true
+        unitPriceText:
+          type: string
+          nullable: true
+        saleDate:
+          type: string
+          format: date-time
+          nullable: true
